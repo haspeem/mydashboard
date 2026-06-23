@@ -62,20 +62,32 @@ export async function getAllViews(
 
 export async function incrLikes(slug: string): Promise<number> {
   if (isKvAvailable) {
-    return kv.incr(`likes:${slug}`)
+    const [articleLikes] = await Promise.all([
+      kv.incr(`likes:${slug}`),
+      kv.incr('likes:total'),
+    ])
+    return articleLikes
   }
   const current = (memGet(`likes:${slug}`) as number) ?? 0
+  const total = (memGet('likes:total') as number) ?? 0
   memSet(`likes:${slug}`, current + 1)
+  memSet('likes:total', total + 1)
   return current + 1
 }
 
 export async function decrLikes(slug: string): Promise<number> {
   if (isKvAvailable) {
-    return kv.decr(`likes:${slug}`)
+    const [articleLikes] = await Promise.all([
+      kv.decr(`likes:${slug}`),
+      kv.decr('likes:total'),
+    ])
+    return Math.max(0, articleLikes)
   }
   const current = (memGet(`likes:${slug}`) as number) ?? 0
   const next = Math.max(0, current - 1)
+  const total = (memGet('likes:total') as number) ?? 0
   memSet(`likes:${slug}`, next)
+  memSet('likes:total', Math.max(0, total - 1))
   return next
 }
 

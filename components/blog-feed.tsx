@@ -3,6 +3,7 @@
 import { Clock, Eye } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { posts, type Post } from '@/lib/data'
 
@@ -13,7 +14,15 @@ function formatDate(date: string) {
   })
 }
 
-function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
+function PostCard({
+  post,
+  featured,
+  views,
+}: {
+  post: Post
+  featured?: boolean
+  views?: number
+}) {
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -67,7 +76,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
           </span>
           <span className="flex items-center gap-1">
             <Eye className="size-3.5" />
-            {post.views.toLocaleString()}
+            {(views ?? 0).toLocaleString()}
           </span>
         </div>
       </div>
@@ -77,6 +86,15 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
 
 export function BlogFeed() {
   const [featured, ...rest] = posts
+  const [viewsMap, setViewsMap] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then((d) => setViewsMap(d.articleViews ?? {}))
+      .catch(() => setViewsMap({}))
+  }, [])
+
   return (
     <div className="flex flex-col gap-8">
       <header>
@@ -89,9 +107,13 @@ export function BlogFeed() {
       </header>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <PostCard post={featured} featured />
+        <PostCard post={featured} featured views={viewsMap[featured.slug]} />
         {rest.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard
+            key={post.id}
+            post={post}
+            views={viewsMap[post.slug]}
+          />
         ))}
       </div>
     </div>

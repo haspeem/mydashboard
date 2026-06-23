@@ -2,6 +2,7 @@
 
 import { ArrowUpRight, Search } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { recentPosts, socials, tags } from '@/lib/data'
@@ -24,6 +25,15 @@ function Widget({
 }
 
 export function RightSidebar() {
+  const [viewsMap, setViewsMap] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then((d) => setViewsMap(d.articleViews ?? {}))
+      .catch(() => setViewsMap({}))
+  }, [])
+
   return (
     <div className="flex flex-col gap-4">
       {/* Search */}
@@ -48,7 +58,7 @@ export function RightSidebar() {
                   {post.title}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {post.readTime} · {post.views.toLocaleString()} 阅读
+                  {post.readTime} · {(viewsMap[post.slug] ?? 0).toLocaleString()} 阅读
                 </span>
               </Link>
             </li>
