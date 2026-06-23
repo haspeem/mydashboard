@@ -1,6 +1,7 @@
 'use client'
 
 import { Menu, Sparkles, X } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { BlogFeed } from '@/components/blog-feed'
 import { Dashboard } from '@/components/dashboard'
@@ -50,8 +51,8 @@ function ArchiveView() {
       <ul className="flex flex-col">
         {posts.map((post) => (
           <li key={post.id}>
-            <a
-              href="#"
+            <Link
+              href={`/blog/${post.slug}`}
               className="group flex items-baseline justify-between gap-4 border-b py-4 transition-colors hover:border-foreground/20"
             >
               <span className="text-sm font-medium text-balance transition-colors group-hover:text-primary">
@@ -60,7 +61,7 @@ function ArchiveView() {
               <span className="shrink-0 font-mono text-xs text-muted-foreground">
                 {new Date(post.date).toLocaleDateString('zh-CN')}
               </span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

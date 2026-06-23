@@ -2,6 +2,7 @@
 
 import { Clock, Eye } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { posts, type Post } from '@/lib/data'
 
@@ -14,7 +15,8 @@ function formatDate(date: string) {
 
 function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
   return (
-    <article
+    <Link
+      href={`/blog/${post.slug}`}
       className={
         'group overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20 ' +
         (featured ? 'md:col-span-2 md:flex' : '')
@@ -69,7 +71,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
           </span>
         </div>
       </div>
-    </article>
+    </Link>
   )
 }
 

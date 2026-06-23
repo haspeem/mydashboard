@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowUpRight, Search } from 'lucide-react'
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { recentPosts, socials, tags } from '@/lib/data'
@@ -39,8 +40,8 @@ export function RightSidebar() {
         <ul className="flex flex-col gap-3">
           {recentPosts.map((post) => (
             <li key={post.id}>
-              <a
-                href="#"
+              <Link
+                href={`/blog/${post.slug}`}
                 className="group flex flex-col gap-0.5"
               >
                 <span className="text-sm font-medium leading-snug text-balance transition-colors group-hover:text-primary">
@@ -49,7 +50,7 @@ export function RightSidebar() {
                 <span className="text-xs text-muted-foreground">
                   {post.readTime} · {post.views.toLocaleString()} 阅读
                 </span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

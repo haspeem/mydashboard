@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Link2, MessageCircle, Twitter } from 'lucide-react'
+import { Check, Link2, MessageCircle, Share2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
@@ -58,7 +58,7 @@ export function ShareButtons({ title }: { title: string }) {
         onClick={handleTwitter}
         className="gap-1.5"
       >
-        <Twitter className="size-4" />
+        <Share2 className="size-4" />
         Twitter
       </Button>
       <div className="relative">
