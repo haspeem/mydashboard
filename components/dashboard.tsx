@@ -11,7 +11,7 @@ import {
   Users,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { activities, weeklyViews, type Activity } from '@/lib/data'
+import { activities, type Activity } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
 const activityIcon: Record<Activity['type'], typeof FileText> = {
@@ -26,6 +26,7 @@ type Stats = {
   totalUV: number
   totalLikes: number
   postCount: number
+  dailyViews: { day: string; views: number }[]
 }
 
 function formatNumber(n: number): string {
@@ -115,24 +116,34 @@ function StatsCards() {
 }
 
 function WeeklyChart() {
-  const max = Math.max(...weeklyViews.map((d) => d.views), 1)
-  const total = weeklyViews.reduce((acc, d) => acc + d.views, 0)
+  const [daily, setDaily] = useState<{ day: string; views: number }[]>([])
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then((d: Stats) => setDaily(d.dailyViews ?? []))
+      .catch(() => setDaily([]))
+  }, [])
+
+  const max = Math.max(...daily.map((d) => d.views), 1)
+  const total = daily.reduce((acc, d) => acc + d.views, 0)
+
   return (
     <div className="rounded-xl border bg-card/50 p-5">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-sm font-medium">每周浏览量</h3>
+          <h3 className="text-sm font-medium">近 7 天浏览量</h3>
           <p className="mt-1 text-2xl font-semibold tracking-tight">
             {total.toLocaleString()}
           </p>
         </div>
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <TrendingUp className="size-3.5" />
-          <span className="font-medium">实时统计中</span>
+          <span className="font-medium">实时</span>
         </span>
       </div>
       <div className="mt-6 flex items-end justify-between gap-2 sm:gap-3">
-        {weeklyViews.map((d) => (
+        {daily.map((d) => (
           <div
             key={d.day}
             className="group flex flex-1 flex-col items-center gap-2"

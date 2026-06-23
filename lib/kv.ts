@@ -16,19 +16,70 @@ function memSet(key: string, value: number | string[]): void {
   memoryStore.set(key, value)
 }
 
+function todayKey(): string {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = String(now.getMonth() + 1).padStart(2, '0')
+  const d = String(now.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+const WEEKDAY_ZH = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+
+export function last7DaysLabels(): string[] {
+  const days: string[] = []
+  const now = new Date()
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(now.getDate() - i)
+    days.push(WEEKDAY_ZH[d.getDay()])
+  }
+  return days
+}
+
 export async function incrViews(slug: string): Promise<number> {
+  const day = todayKey()
   if (isKvAvailable) {
     const [articleViews, total] = await Promise.all([
       kv.incr(`views:${slug}`),
       kv.incr('views:total'),
+      kv.incr(`views:daily:${day}`),
     ])
     return articleViews
   }
   const current = (memGet(`views:${slug}`) as number) ?? 0
   const total = (memGet('views:total') as number) ?? 0
+  const daily = (memGet(`views:daily:${day}`) as number) ?? 0
   memSet(`views:${slug}`, current + 1)
   memSet('views:total', total + 1)
+  memSet(`views:daily:${day}`, daily + 1)
   return current + 1
+}
+
+export async function getDailyViewsLast7Days(): Promise<
+  { day: string; views: number }[]
+> {
+  const now = new Date()
+  const keys: string[] = []
+  const labels: string[] = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(now.getDate() - i)
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    keys.push(`views:daily:${y}-${m}-${dd}`)
+    labels.push(WEEKDAY_ZH[d.getDay()])
+  }
+
+  if (isKvAvailable) {
+    const values = await kv.mget<number[]>(...keys)
+    return labels.map((day, i) => ({ day, views: values[i] ?? 0 }))
+  }
+  return labels.map((day, i) => ({
+    day,
+    views: (memGet(keys[i]) as number) ?? 0,
+  }))
 }
 
 export async function getViews(slug: string): Promise<number> {
