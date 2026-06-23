@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { ProfileStatus } from '@/components/profile-status'
 import { cn } from '@/lib/utils'
 
 export type View = 'home' | 'blog' | 'tags' | 'archive' | 'dashboard'
@@ -85,6 +86,9 @@ export function Sidebar({
             <span className="text-muted-foreground">较上周</span>
           </div>
         </div>
+
+        {/* Status bubble + 网龄 */}
+        <ProfileStatus />
 
         {/* Profile */}
         <div className="flex items-center justify-between rounded-lg px-1.5 py-1">

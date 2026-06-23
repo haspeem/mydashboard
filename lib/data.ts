@@ -143,6 +143,12 @@ export const weeklyViews: DayViews[] = [
   { day: '周日', views: 3120 },
 ]
 
+// 博客的诞生之日（今天）。网龄从这一天开始计算。
+export const blogBirthDate = '2026-06-23'
+
+// 作者当前状态（一句话），显示在头像上方的气泡里
+export const authorStatus = '正在码字，灵感正旺 ✨'
+
 export const socials = [
   { name: 'GitHub', handle: '@lumen', href: '#' },
   { name: 'Twitter', handle: '@lumen_dev', href: '#' },
