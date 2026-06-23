@@ -8,7 +8,7 @@ import {
   Newspaper,
   Sparkles,
 } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
 
@@ -37,7 +37,7 @@ export function Sidebar({
           <Sparkles className="size-4" />
         </div>
         <div className="leading-tight">
-          <p className="text-sm font-semibold tracking-tight">Lumen</p>
+          <p className="text-sm font-semibold tracking-tight">haspeem</p>
           <p className="text-xs text-muted-foreground">个人博客</p>
         </div>
       </div>
@@ -79,9 +79,9 @@ export function Sidebar({
         {/* Quick stats teaser */}
         <div className="rounded-lg border bg-card/50 p-3">
           <p className="text-xs text-muted-foreground">本周浏览量</p>
-          <p className="mt-1 text-lg font-semibold tracking-tight">14,940</p>
-          <div className="mt-2 flex items-center gap-1 text-xs text-primary">
-            <span className="font-medium">+18.2%</span>
+          <p className="mt-1 text-lg font-semibold tracking-tight">0</p>
+          <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+            <span className="font-medium">0%</span>
             <span className="text-muted-foreground">较上周</span>
           </div>
         </div>
@@ -90,12 +90,13 @@ export function Sidebar({
         <div className="flex items-center justify-between rounded-lg px-1.5 py-1">
           <div className="flex items-center gap-2.5">
             <Avatar className="size-8">
+              <AvatarImage src="/avatar.png" alt="haspeem" />
               <AvatarFallback className="bg-secondary text-xs font-medium">
-                LM
+                HS
               </AvatarFallback>
             </Avatar>
             <div className="leading-tight">
-              <p className="text-sm font-medium">Lumen</p>
+              <p className="text-sm font-medium">haspeem</p>
               <p className="text-xs text-muted-foreground">作者</p>
             </div>
           </div>

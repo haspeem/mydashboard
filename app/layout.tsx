@@ -11,8 +11,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Lumen — 个人博客 & 仪表盘',
-  description: '一个简洁现代的个人博客与数据仪表盘',
+  title: 'haspeem — 个人博客 & 仪表盘',
+  description: 'haspeem 的个人博客与数据仪表盘',
   generator: 'v0.app',
   icons: {
     icon: [
