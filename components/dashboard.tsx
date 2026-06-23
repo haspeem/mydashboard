@@ -75,9 +75,8 @@ function WeeklyChart() {
             {total.toLocaleString()}
           </p>
         </div>
-        <span className="flex items-center gap-1 text-xs text-emerald-500">
-          <TrendingUp className="size-3.5" />
-          <span className="font-medium">+18.2%</span>
+        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+          <span className="font-medium">0%</span>
         </span>
       </div>
       <div className="mt-6 flex items-end justify-between gap-2 sm:gap-3">

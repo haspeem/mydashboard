@@ -98,7 +98,7 @@ export function BlogHome() {
           <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Sparkles className="size-4" />
           </div>
-          <span className="text-sm font-semibold tracking-tight">Lumen</span>
+          <span className="text-sm font-semibold tracking-tight">haspeem</span>
         </div>
         <div className="flex items-center gap-1">
           <ThemeToggle />
