@@ -7,11 +7,13 @@ import { Comments } from '@/components/comments'
 import { LikeButton } from '@/components/like-button'
 import { PostNavigation } from '@/components/post-navigation'
 import { ShareButtons } from '@/components/share-buttons'
+import { ViewTracker } from '@/components/view-tracker'
 import {
   getAllSlugs,
   getAdjacentPosts,
   getPostBySlug,
 } from '@/lib/data'
+import { getLikes, getViews } from '@/lib/kv'
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }))
@@ -48,14 +50,18 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   const { prev, next } = getAdjacentPosts(slug)
+  const [initialViews, initialLikes] = await Promise.all([
+    getViews(slug),
+    getLikes(slug),
+  ])
 
   return (
     <BlogPostShell>
       <article className="flex flex-col gap-8">
-        <ArticleHeader post={post} />
+        <ArticleHeader post={post} initialViews={initialViews} />
         <ArticleContent content={post.content} />
         <div className="flex flex-wrap items-center justify-between gap-4 border-t pt-6">
-          <LikeButton initial={0} />
+          <LikeButton slug={post.slug} initial={initialLikes} />
           <ShareButtons title={post.title} />
         </div>
         <PostNavigation prev={prev} next={next} />

@@ -12,8 +12,32 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ProfileStatus } from '@/components/profile-status'
 import { cn } from '@/lib/utils'
+import { useEffect, useState } from 'react'
 
 export type View = 'home' | 'blog' | 'tags' | 'archive' | 'dashboard'
+
+function SidebarStats() {
+  const [views, setViews] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then((d) => setViews(d.totalViews ?? 0))
+      .catch(() => setViews(0))
+  }, [])
+
+  return (
+    <div className="rounded-lg border bg-card/50 p-3">
+      <p className="text-xs text-muted-foreground">总浏览量</p>
+      <p className="mt-1 text-lg font-semibold tracking-tight">
+        {views === null ? '—' : views.toLocaleString()}
+      </p>
+      <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+        <span className="font-medium">实时</span>
+      </div>
+    </div>
+  )
+}
 
 const navItems: { id: View; label: string; icon: typeof Home }[] = [
   { id: 'home', label: '首页', icon: Home },
@@ -78,14 +102,7 @@ export function Sidebar({
 
       <div className="mt-auto flex flex-col gap-3">
         {/* Quick stats teaser */}
-        <div className="rounded-lg border bg-card/50 p-3">
-          <p className="text-xs text-muted-foreground">本周浏览量</p>
-          <p className="mt-1 text-lg font-semibold tracking-tight">0</p>
-          <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
-            <span className="font-medium">0%</span>
-            <span className="text-muted-foreground">较上周</span>
-          </div>
-        </div>
+        <SidebarStats />
 
         {/* Status bubble + 网龄 */}
         <ProfileStatus />

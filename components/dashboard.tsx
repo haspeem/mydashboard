@@ -5,28 +5,79 @@ import {
   ArrowUpRight,
   Eye,
   FileText,
+  Heart,
   MessageSquare,
   TrendingUp,
-  UserPlus,
   Users,
 } from 'lucide-react'
-import { activities, stats, weeklyViews, type Activity } from '@/lib/data'
+import { useEffect, useState } from 'react'
+import { activities, weeklyViews, type Activity } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
 const activityIcon: Record<Activity['type'], typeof FileText> = {
   post: FileText,
   comment: MessageSquare,
-  subscriber: UserPlus,
+  subscriber: Users,
   view: Eye,
 }
 
-const statIcon = [FileText, Eye, MessageSquare, Users]
+type Stats = {
+  totalViews: number
+  totalUV: number
+  totalLikes: number
+  postCount: number
+}
+
+function formatNumber(n: number): string {
+  if (n >= 10000) return `${(n / 1000).toFixed(1)}k`
+  return n.toLocaleString()
+}
 
 function StatsCards() {
+  const [data, setData] = useState<Stats | null>(null)
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then((r) => r.json())
+      .then((d: Stats) => setData(d))
+      .catch(() => setData(null))
+  }, [])
+
+  const cards = [
+    {
+      label: '文章总数',
+      value: data ? String(data.postCount) : '—',
+      change: data ? `+${data.postCount}` : '',
+      trend: 'up' as const,
+      icon: FileText,
+    },
+    {
+      label: '总浏览量',
+      value: data ? formatNumber(data.totalViews) : '—',
+      change: data ? `${data.totalViews}` : '',
+      trend: 'up' as const,
+      icon: Eye,
+    },
+    {
+      label: '点赞数',
+      value: data ? data.totalLikes.toLocaleString() : '—',
+      change: data ? `${data.totalLikes}` : '',
+      trend: 'up' as const,
+      icon: Heart,
+    },
+    {
+      label: '访客数',
+      value: data ? data.totalUV.toLocaleString() : '—',
+      change: data ? `${data.totalUV}` : '',
+      trend: 'up' as const,
+      icon: Users,
+    },
+  ]
+
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {stats.map((stat, i) => {
-        const Icon = statIcon[i]
+      {cards.map((stat, i) => {
+        const Icon = stat.icon
         const up = stat.trend === 'up'
         return (
           <div
@@ -54,7 +105,7 @@ function StatsCards() {
                 <ArrowDownRight className="size-3.5" />
               )}
               <span className="font-medium">{stat.change}</span>
-              <span className="text-muted-foreground">本月</span>
+              <span className="text-muted-foreground">累计</span>
             </div>
           </div>
         )
@@ -64,7 +115,7 @@ function StatsCards() {
 }
 
 function WeeklyChart() {
-  const max = Math.max(...weeklyViews.map((d) => d.views))
+  const max = Math.max(...weeklyViews.map((d) => d.views), 1)
   const total = weeklyViews.reduce((acc, d) => acc + d.views, 0)
   return (
     <div className="rounded-xl border bg-card/50 p-5">
@@ -76,7 +127,8 @@ function WeeklyChart() {
           </p>
         </div>
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
-          <span className="font-medium">0%</span>
+          <TrendingUp className="size-3.5" />
+          <span className="font-medium">实时统计中</span>
         </span>
       </div>
       <div className="mt-6 flex items-end justify-between gap-2 sm:gap-3">
@@ -88,7 +140,9 @@ function WeeklyChart() {
             <div className="flex h-40 w-full items-end">
               <div
                 className="relative w-full rounded-t-md bg-primary/80 transition-all duration-300 group-hover:bg-primary"
-                style={{ height: `${(d.views / max) * 100}%` }}
+                style={{
+                  height: `${Math.max((d.views / max) * 100, 2)}%`,
+                }}
               >
                 <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-medium text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
                   {d.views.toLocaleString()}

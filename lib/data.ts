@@ -121,9 +121,9 @@ export const socials = [
 // repoId 与 categoryId 需在 https://giscus.app 生成后填入，留空时评论区会提示未配置。
 export const giscusConfig = {
   repo: 'haspeem/mydashboard' as `${string}/${string}`,
-  repoId: '',
+  repoId: 'R_kgDOTCzStg',
   category: 'Announcements',
-  categoryId: '',
+  categoryId: 'DIC_kwDOTCzSts4C_wD3',
   mapping: 'pathname' as const,
 }
 

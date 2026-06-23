@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { ViewTracker } from '@/components/view-tracker'
 import { author, type Post } from '@/lib/data'
 
 function formatDate(date: string) {
@@ -13,7 +14,13 @@ function formatDate(date: string) {
   })
 }
 
-export function ArticleHeader({ post }: { post: Post }) {
+export function ArticleHeader({
+  post,
+  initialViews,
+}: {
+  post: Post
+  initialViews?: number
+}) {
   return (
     <header className="flex flex-col gap-6">
       {/* 面包屑（移动端隐藏） */}
@@ -62,7 +69,14 @@ export function ArticleHeader({ post }: { post: Post }) {
         </span>
         <span className="flex items-center gap-1">
           <Eye className="size-3.5" />
-          {post.views.toLocaleString()} 次浏览
+          {typeof initialViews === 'number' ? (
+            <>
+              {initialViews.toLocaleString()} 次浏览
+              <ViewTracker slug={post.slug} />
+            </>
+          ) : (
+            <ViewTracker slug={post.slug} />
+          )}
         </span>
       </div>
 
