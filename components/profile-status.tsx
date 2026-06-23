@@ -59,9 +59,9 @@ export function ProfileStatus() {
   }, [])
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       {/* 状态气泡 */}
-      <div className="group relative ml-1.5 w-fit max-w-full rounded-2xl rounded-bl-sm border bg-card px-3 py-1.5 text-xs text-foreground shadow-sm transition-colors hover:bg-accent/60">
+      <div className="group relative mb-3 ml-1.5 w-fit max-w-full rounded-2xl rounded-bl-sm border bg-card px-3 py-1.5 text-xs text-foreground shadow-sm transition-colors hover:bg-accent/60">
         <span className="flex items-center gap-1.5">
           <span className="relative flex size-1.5">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
@@ -73,9 +73,9 @@ export function ProfileStatus() {
         <span className="absolute -bottom-1 left-3 size-2 rotate-45 border-b border-r bg-card transition-colors group-hover:bg-accent/60" />
       </div>
 
-      {/* 网龄 */}
+      {/* 网龄 —— 独立一行，用分隔线与气泡区分开 */}
       <div
-        className="flex items-center gap-1.5 px-2 text-xs text-muted-foreground"
+        className="flex items-center gap-1.5 border-t px-2 pt-3 text-xs text-muted-foreground"
         title={
           totalDays !== null
             ? `${formatBirth(blogBirthDate)} · 共 ${totalDays} 天`
