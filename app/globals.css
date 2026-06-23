@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -131,4 +133,49 @@
   html {
     @apply font-sans;
   }
+}
+
+/* highlight.js 语法高亮（基于站点设计 token） */
+.hljs {
+  color: var(--card-foreground);
+  background: transparent;
+}
+.hljs-comment,
+.hljs-quote {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name {
+  color: var(--primary);
+}
+.hljs-string,
+.hljs-attr,
+.hljs-template-tag,
+.hljs-addition {
+  color: var(--chart-3);
+}
+.hljs-number,
+.hljs-built_in,
+.hljs-class .hljs-title,
+.hljs-params {
+  color: var(--chart-2);
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-variable {
+  color: var(--chart-5);
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 600;
 }
